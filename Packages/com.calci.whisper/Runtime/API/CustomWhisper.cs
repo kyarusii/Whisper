@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using Calci.Whisperer;
+using UnityEngine;
 
-public sealed class Whisper
+public abstract class CustomWhisper<TKey> 
 {
 	#region Essential
 
-	private static Dictionary<string, List<MsgActionBase>> actions;
+	private static Dictionary<TKey, List<MsgActionBase>> actions;
 
-	static Whisper()
+	static CustomWhisper()
 	{
 		DomainReset();
 	}
@@ -18,7 +18,7 @@ public sealed class Whisper
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
 	private static void DomainReset()
 	{
-		actions = new Dictionary<string, List<MsgActionBase>>();
+		actions = new Dictionary<TKey, List<MsgActionBase>>();
 
 #if UNITY_EDITOR
 		WhisperDebugger.isDestroyed = false;
@@ -29,7 +29,7 @@ public sealed class Whisper
 
 	#region Internal
 
-	private static List<MsgActionBase> FindActions(string eventName)
+	private static List<MsgActionBase> FindActions(TKey eventName)
 	{
 #if UNITY_EDITOR
 		if (!WhisperDebugger.isDestroyed)
@@ -44,7 +44,7 @@ public sealed class Whisper
 		return null;
 	}
 
-	private static void RegisterInternal(string eventName, MsgActionBase msgAction)
+	private static void RegisterInternal(TKey eventName, MsgActionBase msgAction)
 	{
 #if UNITY_EDITOR
 		if (!WhisperDebugger.isDestroyed)
@@ -66,7 +66,7 @@ public sealed class Whisper
 
 	#region PUBLIC API
 
-	public static void Register(string eventName, Action action)
+	public static void Register(TKey eventName, Action action)
 	{
 		MsgAction msgAction = new MsgAction();
 		msgAction.Init(action);
@@ -74,7 +74,7 @@ public sealed class Whisper
 		RegisterInternal(eventName, msgAction);
 	}
 
-	public static void Register<T1>(string eventName, Action<T1> action)
+	public static void Register<T1>(TKey eventName, Action<T1> action)
 	{
 		MsgAction<T1> msgAction = new MsgAction<T1>();
 		msgAction.Init(action);
@@ -82,7 +82,7 @@ public sealed class Whisper
 		RegisterInternal(eventName, msgAction);
 	}
 	
-	public static void Register<T1, T2>(string eventName, Action<T1, T2> action)
+	public static void Register<T1, T2>(TKey eventName, Action<T1, T2> action)
 	{
 		MsgAction<T1, T2> msgAction = new MsgAction<T1, T2>();
 		msgAction.Init(action);
@@ -90,7 +90,7 @@ public sealed class Whisper
 		RegisterInternal(eventName, msgAction);
 	}
 	
-	public static void Register<T1, T2, T3>(string eventName, Action<T1, T2, T3> action)
+	public static void Register<T1, T2, T3>(TKey eventName, Action<T1, T2, T3> action)
 	{
 		MsgAction<T1, T2, T3> msgAction = new MsgAction<T1, T2, T3>();
 		msgAction.Init(action);
@@ -98,7 +98,7 @@ public sealed class Whisper
 		RegisterInternal(eventName, msgAction);
 	}
 
-	public static void Unregister(string eventName, Action action)
+	public static void Unregister(TKey eventName, Action action)
 	{
 		List<MsgActionBase> list = FindActions(eventName);
 		if (list != null)
@@ -116,7 +116,7 @@ public sealed class Whisper
 		}
 	}
 
-	public static void Unregister<T1>(string eventName, Action<T1> action)
+	public static void Unregister<T1>(TKey eventName, Action<T1> action)
 	{
 		List<MsgActionBase> list = FindActions(eventName);
 		if (list != null)
@@ -134,7 +134,7 @@ public sealed class Whisper
 		}
 	}
 	
-	public static void Unregister<T1, T2>(string eventName, Action<T1, T2> action)
+	public static void Unregister<T1, T2>(TKey eventName, Action<T1, T2> action)
 	{
 		List<MsgActionBase> list = FindActions(eventName);
 		if (list != null)
@@ -152,7 +152,7 @@ public sealed class Whisper
 		}
 	}
 	
-	public static void Unregister<T1, T2, T3>(string eventName, Action<T1, T2, T3> action)
+	public static void Unregister<T1, T2, T3>(TKey eventName, Action<T1, T2, T3> action)
 	{
 		List<MsgActionBase> list = FindActions(eventName);
 		if (list != null)
@@ -170,7 +170,7 @@ public sealed class Whisper
 		}
 	}
 
-	public static void Execute(string eventName)
+	public static void Execute(TKey eventName)
 	{
 		List<MsgActionBase> list = FindActions(eventName);
 		if (list != null)
@@ -182,7 +182,7 @@ public sealed class Whisper
 		}
 	}
 
-	public static void Execute<T1>(string eventName, T1 arg1)
+	public static void Execute<T1>(TKey eventName, T1 arg1)
 	{
 		List<MsgActionBase> list = FindActions(eventName);
 		if (list != null)
@@ -194,7 +194,7 @@ public sealed class Whisper
 		}
 	}
 	
-	public static void Execute<T1, T2>(string eventName, T1 arg1, T2 arg2)
+	public static void Execute<T1, T2>(TKey eventName, T1 arg1, T2 arg2)
 	{
 		List<MsgActionBase> list = FindActions(eventName);
 		if (list != null)
@@ -206,7 +206,7 @@ public sealed class Whisper
 		}
 	}
 	
-	public static void Execute<T1, T2, T3>(string eventName, T1 arg1, T2 arg2, T3 arg3)
+	public static void Execute<T1, T2, T3>(TKey eventName, T1 arg1, T2 arg2, T3 arg3)
 	{
 		List<MsgActionBase> list = FindActions(eventName);
 		if (list != null)
@@ -223,12 +223,12 @@ public sealed class Whisper
 	#region DEBUGGER
 
 #if UNITY_EDITOR
-	internal static IReadOnlyList<string> GetManagedActionKeys()
+	internal static IReadOnlyList<TKey> GetManagedActionKeys()
 	{
 		return actions.Keys.ToList();
 	}
 
-	internal static IReadOnlyList<MsgActionBase> GetManagedActions(string key)
+	internal static IReadOnlyList<MsgActionBase> GetManagedActions(TKey key)
 	{
 		return actions[key].ToList();
 	}

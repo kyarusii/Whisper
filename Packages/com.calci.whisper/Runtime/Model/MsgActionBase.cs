@@ -61,4 +61,55 @@ namespace Calci.Whisperer
 			return m_action;
 		}
 	}
+	
+	internal class MsgAction<T1, T2> : MsgActionBase
+	{
+		private event Action<T1, T2> m_action;
+
+		public void Init(Action<T1, T2> action)
+		{
+			m_action = action;
+		}
+
+		public void Invoke(T1 arg1, T2 arg2)
+		{
+			m_action(arg1, arg2);
+		}
+
+		public bool Equals(Action<T1, T2> action)
+		{
+			return m_action == action;
+		}
+
+		public override Delegate Get()
+		{
+			return m_action;
+		}
+	}
+	
+	internal class MsgAction<T1, T2, T3> : MsgActionBase
+	{
+		private event Action<T1, T2, T3> m_action;
+
+		public void Init(Action<T1, T2, T3> action)
+		{
+			m_action = action;
+		}
+
+		public void Invoke(T1 arg1, T2 arg2, T3 arg3)
+		{
+			m_action(arg1, arg2, arg3);
+		}
+
+		public bool Equals(Action<T1, T2, T3> action)
+		{
+			return m_action == action;
+		}
+
+		public override Delegate Get()
+		{
+			return m_action;
+		}
+	}
+	
 }
