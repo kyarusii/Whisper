@@ -1,0 +1,28 @@
+{
+  "name": "com.calci.whisper",
+  "version": "1.0.0",
+  "displayName": "Whisper",
+  "unity": "2021.2",
+  "unityRelease": "0f1",
+  "documentationUrl": "https://github.com/seonghwan-dev/whisper/wiki",
+  "changelogUrl": "https://github.com/seonghwan-dev/whisper/blob/main/Packages/calci.unity.whisper/CHANGELOG.md",
+  "licenseUrl": "https://github.com/seonghwan-dev/whisper/blob/main/Packages/calci.unity.whisper/LICENSE",
+  "author": {
+    "name": "Seonghwan",
+    "email": "seonghwan@pm.me",
+    "url": "https://github.com/seonghwan-dev"
+  },
+  "homepage": "https://github.com/seonghwan-dev/whisper",
+  "bugs": {
+    "url": "https://github.com/seonghwan-dev/whisper/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:seonghwan-dev/whisper.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "utility",
+    "unity"
+  ]
+}
