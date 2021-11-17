@@ -14,7 +14,7 @@ example) `"com.calci.whisper": "1.0.0"`
 ```json
 {
     "dependencies": {
-        "com.calci.assetlens": "x.x.x"
+        "com.calci.whisper": "x.x.x"
     }
 }
 ```
